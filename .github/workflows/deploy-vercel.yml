@@ -1,0 +1,41 @@
+# Despliegue automático a Vercel cada vez que se hace push a main.
+#
+# Para activarlo, añade estos 3 secretos en GitHub:
+#   Settings -> Secrets and variables -> Actions -> New repository secret
+#     VERCEL_TOKEN        (Vercel -> Account Settings -> Tokens)
+#     VERCEL_ORG_ID       (aparece en el archivo .vercel/project.json tras 'vercel link')
+#     VERCEL_PROJECT_ID   (idem)
+#
+# Si prefieres NO usar GitHub Actions, simplemente importa el repo
+# directamente en vercel.com y se desplegará solo. Este workflow es opcional.
+
+name: Deploy a Vercel
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Obtener configuración de Vercel
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Build
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Desplegar
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
