@@ -1,0 +1,33 @@
+FOTOS DE TUS JOYAS
+==================
+
+Aquí van las fotos de tus productos (opcional).
+
+CÓMO USARLAS
+------------
+1. Sube tu foto a esta carpeta "fotos" (en GitHub: entra a la carpeta y usa
+   "Add file -> Upload files"). Ejemplo de nombre: anillo-marea.jpg
+   - Usa nombres sin espacios ni acentos: anillo-marea.jpg, collar-gota.jpg
+   - Formatos: .jpg, .png o .webp
+   - Tamaño recomendado: cuadrada (por ejemplo 1000 x 1000 px).
+
+2. En el archivo app.jsx, en la joya que quieras, pon la ruta de la foto al
+   final, entre comillas. Ejemplo:
+
+   P(1, "Anillo Solitario Marea", 2480, "anillos", "ring", "#176B82",
+     "Marea", "AM-RG-001", 6, "Oro 18k & topacio azul", 5, true,
+     "fotos/anillo-marea.jpg")
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+                                  esta es la foto
+
+3. Guarda (Commit changes). En 1-2 minutos la foto aparece en tu tienda.
+
+¿NO PONES FOTO?
+---------------
+No pasa nada: si dejas la foto vacía ("") o pones una ruta equivocada, la
+tienda mostrará automáticamente un dibujo elegante de la joya. Nunca se ve rota.
+
+TAMBIÉN PUEDES USAR UNA FOTO DE INTERNET
+----------------------------------------
+En lugar de subir el archivo, puedes pegar una dirección que termine en .jpg:
+   "https://images.misitio.com/anillo.jpg"

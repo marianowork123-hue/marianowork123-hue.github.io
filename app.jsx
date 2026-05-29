@@ -28,8 +28,34 @@ const COLLECTIONS = [
   { id: "abismo", name: "Abismo", tag: "Profundidad y misterio", gem: "#0E2A3A" },
 ];
 
-const P = (id, name, price, category, type, gem, collection, sku, stock, materials, rating, featured) =>
-  ({ id, name, price, category, type, gem, collection, sku, stock, materials, rating, featured,
+/* ============================================================================
+   CONFIGURACIÓN — lo que cambias tú (sin tocar nada más)
+   ----------------------------------------------------------------------------
+   • WHATSAPP: tu número con código de país, solo números (México = 52).
+   • EMAIL_PEDIDOS: tu correo, para recibir pedidos por email (opcional).
+   • FORMSPREE_ID: si quieres recibir los pedidos por correo automáticamente,
+     crea una cuenta gratis en https://formspree.io, copia el código de tu
+     formulario (se ve como "xyzabcd") y pégalo aquí entre las comillas.
+     Si lo dejas vacío (""), el pedido se enviará por WhatsApp.
+   • MONEDA / PAIS_MONEDA: símbolo y formato de los precios.
+   ============================================================================ */
+const CONFIG = {
+  WHATSAPP: "521234567890",
+  EMAIL_PEDIDOS: "hola@azulmarino.com",
+  FORMSPREE_ID: "",
+  MONEDA: "$",
+  PAIS_MONEDA: "es-MX",
+  ENVIO_GRATIS_DESDE: 1500,
+  COSTO_ENVIO: 250,
+  CUPON: { codigo: "AZUL10", descuento: 0.1 },
+};
+
+/* P(...) crea un producto. El último dato (img) es OPCIONAL:
+   - déjalo vacío  "" y se mostrará un dibujo elegante de la joya, o
+   - pon la foto:  "fotos/mi-anillo.jpg"  (archivo en la carpeta /fotos)
+                   o una dirección de internet "https://....jpg" */
+const P = (id, name, price, category, type, gem, collection, sku, stock, materials, rating, featured, img = "") =>
+  ({ id, name, price, category, type, gem, collection, sku, stock, materials, rating, featured, img,
      slug: name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
      desc: `Pieza ${materials.toLowerCase()} de la colección ${collection}. Acabado a mano por nuestros orfebres, pensada para acompañarte toda la vida.` });
 
@@ -54,8 +80,8 @@ const TESTIMONIALS = [
   { t: "Compré los aretes para mi madre y lloró. Eso lo dice todo.", a: "Andrés P.", c: "Aretes Solsticio" },
 ];
 
-const fmt = (n) => "$" + n.toLocaleString("es-MX");
-const WHATSAPP = "521234567890";
+const fmt = (n) => CONFIG.MONEDA + n.toLocaleString(CONFIG.PAIS_MONEDA);
+const WHATSAPP = CONFIG.WHATSAPP;
 
 /* ============================== ILLUSTRATIONS ============================== */
 function Facets({ cx, cy, r, gem }) {
@@ -117,6 +143,24 @@ function Jewel({ type, gem, size = 220 }) {
   );
 }
 
+/* Photo: si el producto tiene foto (img), la muestra; si no, dibuja la joya.
+   Si la foto no carga (ruta equivocada), también cae al dibujo automáticamente. */
+function Photo({ p, gem, size = 220 }) {
+  const [failed, setFailed] = useState(false);
+  if (p && p.img && !failed) {
+    return (
+      <img
+        src={p.img}
+        alt={p.name || "Joya"}
+        loading="lazy"
+        onError={() => setFailed(true)}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+      />
+    );
+  }
+  return <Jewel type={p ? p.type : "ring"} gem={gem || (p && p.gem)} size={size} />;
+}
+
 /* ============================== HOOKS ============================== */
 function useReveal() {
   const ref = useRef(null);
@@ -152,7 +196,7 @@ function ProductCard({ p, onOpen, onAdd, onWish, wished }) {
           onClick={(e) => { e.stopPropagation(); onWish(p); }}>
           <Heart size={16} fill={wished ? "#176B82" : "none"} />
         </button>
-        <div className="jewel-wrap"><Jewel type={p.type} gem={p.gem} /></div>
+        <div className="jewel-wrap"><Photo p={p} /></div>
         <button className="quick" onClick={(e) => { e.stopPropagation(); onAdd(p); }}>
           Añadir al carrito
         </button>
@@ -177,8 +221,12 @@ function App() {
   const [cat, setCat] = useState("todos");
   const [sort, setSort] = useState("destacados");
   const [q, setQ] = useState("");
-  const [cart, setCart] = useState([]);
-  const [wish, setWish] = useState([]);
+  const [cart, setCart] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("am_cart") || "[]"); } catch { return []; }
+  });
+  const [wish, setWish] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("am_wish") || "[]"); } catch { return []; }
+  });
   const [cartOpen, setCartOpen] = useState(false);
   const [wishOpen, setWishOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -208,13 +256,58 @@ function App() {
 
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const discount = applied ? Math.round(subtotal * applied) : 0;
-  const shipping = subtotal > 1500 || subtotal === 0 ? 0 : 250;
+  const shipping = subtotal > CONFIG.ENVIO_GRATIS_DESDE || subtotal === 0 ? 0 : CONFIG.COSTO_ENVIO;
   const total = subtotal - discount + shipping;
   const count = cart.reduce((s, i) => s + i.qty, 0);
 
   const applyCoupon = () => {
-    if (coupon.trim().toUpperCase() === "AZUL10") { setApplied(0.1); flash("Cupón AZUL10 aplicado · 10%"); }
-    else { setApplied(null); flash("Cupón no válido"); }
+    if (coupon.trim().toUpperCase() === CONFIG.CUPON.codigo.toUpperCase()) {
+      setApplied(CONFIG.CUPON.descuento);
+      flash(`Cupón ${CONFIG.CUPON.codigo} aplicado · ${Math.round(CONFIG.CUPON.descuento * 100)}%`);
+    } else { setApplied(null); flash("Cupón no válido"); }
+  };
+
+  // Resumen del pedido en texto (para WhatsApp y para el correo).
+  const orderText = () => {
+    const lines = cart.map((i) => `• ${i.qty}× ${i.name} (${i.sku}) — ${fmt(i.price * i.qty)}`).join("\n");
+    let t = `Hola, quiero hacer un pedido en Azul Marino:\n\n${lines}\n\nSubtotal: ${fmt(subtotal)}`;
+    if (discount > 0) t += `\nDescuento: −${fmt(discount)}`;
+    t += `\nEnvío: ${shipping === 0 ? "Gratis" : fmt(shipping)}\nTotal: ${fmt(total)}`;
+    return t;
+  };
+
+  // Finalizar: si hay Formspree configurado, envía el pedido por correo;
+  // si no, abre WhatsApp con el pedido listo. Ambos caminos funcionan sin servidor.
+  const [sending, setSending] = useState(false);
+  const checkout = async () => {
+    if (cart.length === 0) return;
+    if (CONFIG.FORMSPREE_ID) {
+      try {
+        setSending(true);
+        const res = await fetch(`https://formspree.io/f/${CONFIG.FORMSPREE_ID}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            pedido: orderText(),
+            total: fmt(total),
+            articulos: cart.map((i) => `${i.qty}x ${i.name}`).join(", "),
+          }),
+        });
+        setSending(false);
+        if (res.ok) {
+          setCart([]); setApplied(null); setCoupon(""); setCartOpen(false);
+          flash("¡Pedido enviado! Te contactaremos muy pronto.");
+        } else {
+          window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(orderText())}`, "_blank");
+        }
+      } catch {
+        setSending(false);
+        window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(orderText())}`, "_blank");
+      }
+    } else {
+      window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(orderText())}`, "_blank");
+      flash("Abriendo WhatsApp con tu pedido…");
+    }
   };
 
   const list = useMemo(() => {
@@ -234,13 +327,15 @@ function App() {
   const goShop = (c) => { setCat(c); home(); setMenuOpen(false); setTimeout(() => document.getElementById("tienda")?.scrollIntoView({ behavior: "smooth" }), 60); };
 
   useEffect(() => { document.body.style.overflow = (cartOpen || wishOpen || searchOpen || menuOpen) ? "hidden" : ""; }, [cartOpen, wishOpen, searchOpen, menuOpen]);
+  useEffect(() => { try { localStorage.setItem("am_cart", JSON.stringify(cart)); } catch {} }, [cart]);
+  useEffect(() => { try { localStorage.setItem("am_wish", JSON.stringify(wish)); } catch {} }, [wish]);
 
   return (
     <div className="am">
       <style>{CSS}</style>
 
       {/* announcement */}
-      <div className="bar">Envío gratis en pedidos superiores a {fmt(1500)} · Piezas hechas a mano · Garantía de por vida</div>
+      <div className="bar">Envío gratis en pedidos superiores a {fmt(CONFIG.ENVIO_GRATIS_DESDE)} · Piezas hechas a mano · Garantía de por vida</div>
 
       {/* header */}
       <header className="hdr">
@@ -439,14 +534,16 @@ function App() {
           <button className="back" onClick={home}><ArrowLeft size={16} /> Volver</button>
           <div className="pdp-grid">
             <div className="pdp-gallery">
-              <div className="pdp-main"><Jewel type={active.type} gem={active.gem} size={420} /></div>
-              <div className="pdp-thumbs">
-                {[active.gem, "#C99A2E", "#0E2A3A"].map((g, i) => (
-                  <button key={i} className={`thumb ${variant === i ? "on" : ""}`} onClick={() => setVariant(i)}>
-                    <Jewel type={active.type} gem={g} />
-                  </button>
-                ))}
-              </div>
+              <div className="pdp-main"><Photo p={active} gem={active.gem} size={420} /></div>
+              {!active.img && (
+                <div className="pdp-thumbs">
+                  {[active.gem, "#C99A2E", "#0E2A3A"].map((g, i) => (
+                    <button key={i} className={`thumb ${variant === i ? "on" : ""}`} onClick={() => setVariant(i)}>
+                      <Jewel type={active.type} gem={g} />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="pdp-info">
               <span className="kicker">{active.collection}</span>
@@ -479,7 +576,7 @@ function App() {
                 <button className="link" onClick={() => toggleWish(active)}>
                   <Heart size={15} fill={isWished(active.id) ? "#176B82" : "none"} /> {isWished(active.id) ? "En favoritos" : "Añadir a favoritos"}
                 </button>
-                <a className="link" href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola, me interesa " + active.name)}`} target="_blank" rel="noreferrer">
+                <a className="link" href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola, me interesa " + active.name + " (" + active.sku + ") — " + fmt(active.price) + ". ¿Sigue disponible?")}`} target="_blank" rel="noreferrer">
                   <MessageCircle size={15} /> Consultar por WhatsApp
                 </a>
               </div>
@@ -508,7 +605,7 @@ function App() {
           <div className="ftr-brand">
             <div className="brand"><svg width="30" height="22" viewBox="0 0 60 46"><path d="M14 12 L30 4 L46 12 L46 14 L30 30 L14 14 Z" fill="none" stroke={GOLD} strokeWidth="3" strokeLinejoin="round" /><path d="M22 12 L30 4 L38 12 L30 18 Z" fill="#176B82" /></svg><span className="wordmark">AZUL MARINO</span></div>
             <p className="muted">Joyería de autor hecha a mano. Oro 18k y gemas de origen responsable.</p>
-            <div className="ftr-social"><a href="#"><Instagram size={18} /></a><a href={`https://wa.me/${WHATSAPP}`}><MessageCircle size={18} /></a><a href="#"><Mail size={18} /></a></div>
+            <div className="ftr-social"><a href="#"><Instagram size={18} /></a><a href={`https://wa.me/${WHATSAPP}`}><MessageCircle size={18} /></a><a href={`mailto:${CONFIG.EMAIL_PEDIDOS}`}><Mail size={18} /></a></div>
           </div>
           <div className="ftr-col"><h4>Tienda</h4>{CATEGORIES.map((c) => <a key={c.id} onClick={() => goShop(c.id)}>{c.name}</a>)}<a onClick={() => goShop("todos")}>Todas las piezas</a></div>
           <div className="ftr-col"><h4>Ayuda</h4><a href="#">Contacto</a><a href="#">Preguntas frecuentes</a><a href="#">Guía de tallas</a><a href="#">Cuidado de joyas</a></div>
@@ -526,7 +623,7 @@ function App() {
         <div className="drawer-b">
           {cart.length === 0 ? <p className="empty sm">Tu carrito está vacío.</p> : cart.map((i) => (
             <div className="line" key={i.id}>
-              <div className="line-img"><Jewel type={i.type} gem={i.gem} /></div>
+              <div className="line-img"><Photo p={i} /></div>
               <div className="line-info">
                 <strong>{i.name}</strong><span className="muted small">{i.materials}</span>
                 <div className="line-qty">
@@ -551,8 +648,14 @@ function App() {
               <div><span>Envío</span><span>{shipping === 0 ? "Gratis" : fmt(shipping)}</span></div>
               <div className="grand"><span>Total</span><span>{fmt(total)}</span></div>
             </div>
-            <button className="btn block" onClick={() => flash("Redirigiendo a Stripe Checkout… (demo)")}>Finalizar compra</button>
-            <p className="secure"><ShieldCheck size={13} /> Pago seguro con Stripe</p>
+            <button className="btn block" disabled={sending} onClick={checkout}>
+              {sending ? "Enviando pedido…" : (CONFIG.FORMSPREE_ID ? "Enviar pedido" : "Pedir por WhatsApp")}
+            </button>
+            <p className="secure">
+              {CONFIG.FORMSPREE_ID
+                ? <><Mail size={13} /> Recibimos tu pedido y te contactamos</>
+                : <><MessageCircle size={13} /> Te respondemos por WhatsApp para coordinar el pago</>}
+            </p>
           </div>
         )}
       </aside>
@@ -563,7 +666,7 @@ function App() {
         <div className="drawer-b">
           {wish.length === 0 ? <p className="empty sm">Aún no guardas piezas.</p> : wish.map((i) => (
             <div className="line" key={i.id}>
-              <div className="line-img" style={{ cursor: "pointer" }} onClick={() => { setWishOpen(false); open(i); }}><Jewel type={i.type} gem={i.gem} /></div>
+              <div className="line-img" style={{ cursor: "pointer" }} onClick={() => { setWishOpen(false); open(i); }}><Photo p={i} /></div>
               <div className="line-info">
                 <strong>{i.name}</strong><span className="price sm">{fmt(i.price)}</span>
                 <div className="line-qty"><button className="mini" onClick={() => add(i, 1)}>Añadir</button><button className="rm" onClick={() => toggleWish(i)}><Trash2 size={14} /></button></div>
@@ -584,7 +687,7 @@ function App() {
           <div className="search-res">
             {(q ? PRODUCTS.filter((p) => (p.name + p.materials + p.collection).toLowerCase().includes(q.toLowerCase())) : featured).slice(0, 6).map((p) => (
               <button key={p.id} className="sr" onClick={() => { setSearchOpen(false); open(p); }}>
-                <div className="sr-img"><Jewel type={p.type} gem={p.gem} /></div>
+                <div className="sr-img"><Photo p={p} /></div>
                 <div><strong>{p.name}</strong><span className="muted small">{p.materials}</span></div>
                 <span className="price sm">{fmt(p.price)}</span>
               </button>
@@ -721,6 +824,8 @@ const CSS = `
 .card:hover{transform:translateY(-6px);box-shadow:0 26px 50px rgba(14,23,38,.14)}
 .card-media{position:relative;aspect-ratio:1;background:radial-gradient(circle at 50% 40%,#fff,var(--cream));display:grid;place-items:center;overflow:hidden}
 .jewel-wrap{width:62%;transition:transform .55s cubic-bezier(.16,1,.3,1)}
+.jewel-wrap:has(img){width:100%;height:100%}
+.card-media img{width:100%;height:100%;object-fit:cover}
 .card:hover .jewel-wrap{transform:scale(1.08) rotate(-2deg)}
 .card-collection{position:absolute;top:.8rem;left:.8rem;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-d)}
 .wish{position:absolute;top:.6rem;right:.6rem;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.85);
@@ -807,6 +912,8 @@ const CSS = `
 .pdp-main{background:radial-gradient(circle at 50% 40%,#fff,var(--cream));border:1px solid var(--line);border-radius:8px;
   aspect-ratio:1;display:grid;place-items:center;padding:2rem}
 .pdp-main svg{width:70%}
+.pdp-main:has(img){padding:0;overflow:hidden}
+.pdp-main img{width:100%;height:100%;object-fit:cover;border-radius:8px}
 .pdp-thumbs{display:flex;gap:.7rem;margin-top:.8rem}
 .thumb{width:78px;height:78px;border:1px solid var(--line);border-radius:5px;background:var(--cream);display:grid;place-items:center;padding:.4rem;transition:border .3s}
 .thumb svg{width:100%} .thumb.on{border-color:var(--gold);border-width:2px}
@@ -854,6 +961,8 @@ const CSS = `
 .line{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}
 .line-img{width:74px;height:74px;flex-shrink:0;background:radial-gradient(circle,#fff,var(--cream));border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;padding:.4rem}
 .line-img svg{width:100%}
+.line-img:has(img){padding:0;overflow:hidden}
+.line-img img{width:100%;height:100%;object-fit:cover;border-radius:5px}
 .line-info{flex:1;display:flex;flex-direction:column;gap:.2rem}
 .line-info strong{font-size:.92rem;font-weight:500}
 .line-qty{display:flex;align-items:center;gap:.4rem;margin-top:.4rem}
@@ -881,7 +990,10 @@ const CSS = `
 .sr{display:flex;align-items:center;gap:1rem;width:100%;text-align:left;padding:.9rem;border-radius:6px;transition:background .25s}
 .sr:hover{background:var(--cream)}
 .sr-img{width:60px;height:60px;background:radial-gradient(circle,#fff,var(--cream));border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;padding:.3rem}
-.sr-img svg{width:100%} .sr div{flex:1} .sr strong{display:block;font-weight:500}
+.sr-img svg{width:100%}
+.sr-img:has(img){padding:0;overflow:hidden}
+.sr-img img{width:100%;height:100%;object-fit:cover;border-radius:5px}
+.sr div{flex:1} .sr strong{display:block;font-weight:500}
 
 /* mobile menu */
 .msheet{position:fixed;inset:0;z-index:80;background:var(--ivory);animation:fade .25s;display:flex;flex-direction:column}
