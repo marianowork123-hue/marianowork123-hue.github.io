@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de tu tienda — Azul Marino Joyería</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1726; --navy:#13293D; --navy2:#1B3A57;
+  --gold:#C99A2E; --gold-d:#A87E1E; --gold-l:#E3C77A;
+  --teal:#176B82; --ivory:#FBF9F4; --cream:#F1EBE0; --line:#e7e2d6;
+  --muted:#7a7263;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',system-ui,sans-serif;color:var(--ink);background:#ece7dc;line-height:1.7;-webkit-font-smoothing:antialiased}
+.page{max-width:880px;margin:0 auto;background:var(--ivory);box-shadow:0 30px 80px rgba(14,23,38,.18)}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;line-height:1.1}
+em{font-style:italic;color:var(--gold-d)}
+.kicker{font-family:'Jost';font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-d);font-weight:500}
+
+/* ---------- COVER ---------- */
+.cover{background:radial-gradient(120% 90% at 70% 10%, var(--navy2) 0%, var(--ink) 60%);color:var(--ivory);padding:5rem 3.5rem 4rem;position:relative;overflow:hidden}
+.cover:before{content:"";position:absolute;inset:0;background:radial-gradient(closest-side, rgba(201,154,46,.18), transparent 70%);top:-30%;left:30%;width:80%;height:80%}
+.cover .logo{position:relative;margin-bottom:2.6rem}
+.cover .wordmark{display:block;font-family:'Jost';letter-spacing:.42em;font-size:.9rem;font-weight:400;margin-top:.8rem;color:var(--gold-l)}
+.cover .sub-word{display:block;font-size:.62rem;letter-spacing:.46em;color:rgba(251,249,244,.55);margin-top:.35rem}
+.cover h1{font-size:3.6rem;position:relative;margin:.4rem 0 .8rem;letter-spacing:.01em}
+.cover h1 em{color:var(--gold-l)}
+.cover p{position:relative;max-width:30rem;color:rgba(251,249,244,.82);font-weight:300;font-size:1.08rem}
+.cover .tagchip{position:relative;display:inline-flex;align-items:center;gap:.5rem;margin-top:2.2rem;padding:.5rem 1.1rem;border:1px solid rgba(227,199,122,.4);border-radius:40px;font-size:.78rem;letter-spacing:.08em;color:var(--gold-l)}
+
+/* ---------- BODY SECTIONS ---------- */
+.intro{padding:3.2rem 3.5rem 1rem}
+.lead{font-size:1.18rem;font-weight:300;color:#3c382e}
+.lead strong{font-weight:500;color:var(--ink)}
+section.block{padding:2.6rem 3.5rem;border-top:1px solid var(--line)}
+.sec-tag{display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem}
+.sec-tag .no{flex:none;width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--gold-l);display:grid;place-items:center;font-family:'Cormorant Garamond';font-size:1.5rem;font-weight:600}
+.sec-tag h2{font-size:2.1rem}
+.sec-tag .sub{font-size:.95rem;color:var(--muted);margin-top:.1rem}
+p.t{margin:.7rem 0;color:#403b30}
+
+/* steps */
+.steps{counter-reset:s;margin:1.4rem 0 .4rem}
+.step{display:flex;gap:1rem;padding:.7rem 0;align-items:flex-start}
+.step .b{flex:none;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#1a1308;display:grid;place-items:center;font-size:.85rem;font-weight:600;font-family:'Jost';margin-top:.1rem}
+.step .x{flex:1}
+.step .x b{font-weight:600;color:var(--ink)}
+
+/* callouts */
+.note{margin:1.4rem 0;padding:1.1rem 1.3rem;border-radius:10px;font-size:.96rem}
+.note.tip{background:#eef5f6;border-left:4px solid var(--teal);color:#23535f}
+.note.warn{background:#fbf3e2;border-left:4px solid var(--gold);color:#7a5a16}
+.note.calm{background:#eef6f0;border-left:4px solid #3f9d68;color:#2c6644}
+.note b{font-weight:600}
+.note .h{display:block;font-family:'Jost';font-weight:600;letter-spacing:.04em;margin-bottom:.25rem;text-transform:uppercase;font-size:.74rem}
+
+/* ---------- MOCK SCREENSHOTS ---------- */
+.shot{border-radius:12px;overflow:hidden;border:1px solid #d8d2c4;box-shadow:0 18px 44px rgba(14,23,38,.16);margin:1.5rem 0;background:#fff;font-size:.8rem}
+.shot .bar{background:#0E1726;height:34px;display:flex;align-items:center;gap:6px;padding:0 12px}
+.shot .bar i{width:9px;height:9px;border-radius:50%;background:#3a4759;display:block}
+.shot .bar i:nth-child(1){background:#e0626b}.shot .bar i:nth-child(2){background:#e3c77a}.shot .bar i:nth-child(3){background:#5fae7e}
+.shot .bar .url{margin-left:10px;font-size:.68rem;color:#8893a4;letter-spacing:.05em}
+.app{display:flex;min-height:230px}
+.side{width:150px;background:#0E1726;color:#cdc6b6;padding:14px 10px;flex:none}
+.side .lg{display:flex;align-items:center;gap:6px;font-size:.62rem;letter-spacing:.22em;color:#fff;padding:2px 6px 14px}
+.side a{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;font-size:.74rem;color:rgba(205,198,182,.8);margin-bottom:2px}
+.side a .dotmenu{width:14px;height:14px;border-radius:4px;border:1.6px solid currentColor;flex:none;opacity:.7}
+.side a.on{background:var(--gold);color:#1a1308;font-weight:600}
+.side a.on .dotmenu{border-color:#1a1308;opacity:1}
+.work{flex:1;background:#f6f3ec;padding:16px 18px}
+.work h5{font-family:'Cormorant Garamond';font-size:1.35rem;font-weight:600;margin-bottom:2px}
+.work .wp{color:#8a8068;font-size:.72rem;margin-bottom:12px}
+.fld{margin-bottom:9px}
+.fld label{display:block;font-size:.62rem;letter-spacing:.05em;color:#6a6356;margin-bottom:3px;text-transform:uppercase}
+.inp{background:#fff;border:1px solid var(--line);border-radius:5px;padding:7px 9px;font-size:.74rem;color:#403b30}
+.inp.ph{color:#b3aa97}
+.two{display:flex;gap:9px}.two>div{flex:1}
+.gbtn{display:inline-block;background:var(--gold);color:#1a1308;font-weight:600;font-size:.72rem;padding:8px 14px;border-radius:6px;letter-spacing:.04em}
+.dbtn{display:inline-block;background:var(--ink);color:#fff;font-size:.72rem;padding:8px 14px;border-radius:6px}
+.ghbtn{display:inline-block;background:#fff;border:1px solid var(--line);color:var(--ink);font-size:.7rem;padding:6px 10px;border-radius:6px}
+.drop{border:2px dashed #cdbf9b;border-radius:9px;padding:18px;text-align:center;color:#9a8e70;background:#fbf8f0;font-size:.74rem}
+.drop .ic{width:26px;height:26px;border:2px solid #cdbf9b;border-radius:6px;margin:0 auto 6px;position:relative}
+.drop .ic:after{content:"";position:absolute;width:10px;height:2px;background:#cdbf9b;top:11px;left:6px}.drop .ic:before{content:"";position:absolute;height:10px;width:2px;background:#cdbf9b;left:11px;top:6px}
+.flex{display:flex;gap:14px;align-items:flex-start}
+.prevcard{flex:none;width:150px;background:#fff;border:1px solid var(--line);border-radius:9px;overflow:hidden;box-shadow:0 10px 24px rgba(14,23,38,.1)}
+.prevcard .img{height:96px;background:linear-gradient(135deg,#0E1726,#1B3A57);display:grid;place-items:center}
+.prevcard .pad{padding:9px}
+.prevcard .pad b{font-family:'Cormorant Garamond';font-size:1rem;display:block;color:var(--ink)}
+.prevcard .pad small{color:#9a8e70;font-size:.64rem}
+.prevcard .pr{color:var(--gold-d);font-family:'Cormorant Garamond';font-size:1.15rem;font-weight:600;margin-top:4px}
+table.mock{width:100%;border-collapse:collapse;font-size:.72rem}
+table.mock th{text-align:left;color:#8a8068;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:6px 4px;border-bottom:1px solid var(--line)}
+table.mock td{padding:8px 4px;border-bottom:1px solid var(--line);color:#403b30}
+.thumb{width:34px;height:34px;border-radius:5px;background:linear-gradient(135deg,#0E1726,#1B3A57)}
+.pill{font-size:.62rem;padding:2px 8px;border-radius:20px;background:#eef1ee;color:#2f7d4f}
+.pill.low{background:#fbeee6;color:#b4541f}
+.iconbtn{display:inline-grid;place-items:center;width:24px;height:24px;border:1px solid var(--line);border-radius:5px;background:#fff;color:#6a6356;font-size:.7rem;margin-left:3px}
+.logincard{margin:auto;width:230px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 16px;text-align:center}
+.logincard h6{font-family:'Cormorant Garamond';font-size:1.2rem;font-weight:600}
+.logincard p{font-size:.64rem;color:#8a8068;margin-bottom:10px}
+.center{display:grid;place-items:center;min-height:230px;background:#f6f3ec}
+.diamond{width:14px;height:14px;transform:rotate(45deg);border:2px solid var(--gold);position:relative}
+.diamond:after{content:"";position:absolute;inset:3px;background:var(--teal)}
+
+/* checklist */
+ul.clean{list-style:none;margin:.6rem 0}
+ul.clean li{position:relative;padding:.35rem 0 .35rem 1.8rem;color:#403b30}
+ul.clean li:before{content:"";position:absolute;left:0;top:.7rem;width:9px;height:9px;border-radius:50%;background:var(--teal)}
+ul.x li:before{background:none;border:2px solid #c98a8a;width:11px;height:11px;border-radius:3px;top:.6rem}
+
+/* footer */
+.foot{background:var(--ink);color:rgba(251,249,244,.8);padding:2.6rem 3.5rem;text-align:center}
+.foot .wordmark{font-family:'Jost';letter-spacing:.4em;font-size:.85rem;color:var(--gold-l)}
+.foot p{font-size:.9rem;font-weight:300;margin-top:.6rem}
+.foot .small{font-size:.74rem;color:rgba(251,249,244,.45);margin-top:1.4rem;letter-spacing:.04em}
+
+.toc{padding:2.4rem 3.5rem;background:var(--cream);border-top:1px solid var(--line)}
+.toc h3{font-size:1.4rem;margin-bottom:.8rem}
+.toc ol{list-style:none;counter-reset:t;columns:2;column-gap:2.5rem}
+.toc li{counter-increment:t;padding:.4rem 0;font-size:.95rem;color:#4a4536;break-inside:avoid}
+.toc li:before{content:counter(t);display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--gold-l);font-size:.74rem;margin-right:.6rem;font-family:'Jost'}
+
+@media (max-width:700px){
+  .cover,.intro,section.block,.toc,.foot{padding-left:1.4rem;padding-right:1.4rem}
+  .cover h1{font-size:2.6rem}.toc ol{columns:1}.flex{flex-direction:column}.prevcard{width:100%}
+  .two{flex-direction:column}
+}
+@media print{
+  body{background:#fff}
+  .page{box-shadow:none;max-width:100%}
+  section.block,.toc{page-break-inside:avoid}
+  .cover{page-break-after:always}
+  .shot{box-shadow:none}
+  *{ -webkit-print-color-adjust:exact; print-color-adjust:exact }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <header class="cover">
+    <div class="logo">
+      <svg width="64" height="50" viewBox="0 0 60 46"><path d="M14 12 L30 4 L46 12 L46 14 L30 30 L14 14 Z" fill="none" stroke="#C99A2E" stroke-width="2.6" stroke-linejoin="round"/><path d="M22 12 L30 4 L38 12 L30 18 Z" fill="#176B82"/></svg>
+      <span class="wordmark">AZUL MARINO</span>
+      <span class="sub-word">JEWELRY DESIGN</span>
+    </div>
+    <span class="kicker" style="color:var(--gold-l)">Guía para administrar tu tienda</span>
+    <h1>Tu tienda,<br><em>en tus manos.</em></h1>
+    <p>Una guía simple, paso a paso, para que cambies los textos de tu página y agregues productos nuevos tú mismo. Sin programar. Sin complicaciones.</p>
+    <span class="tagchip"><span class="diamond" style="width:10px;height:10px;border-width:1.6px"></span> No necesitas saber nada de tecnología</span>
+  </header>
+
+  <!-- INTRO -->
+  <div class="intro">
+    <p class="lead">Esta tienda fue construida para que <strong>tú tengas el control</strong>. Todo lo del día a día —cambiar un texto, subir una joya nueva, ver tus pedidos— se hace desde un <strong>panel privado</strong>, llenando casillas y apretando un botón. Igual de fácil que escribir un mensaje.</p>
+    <div class="note calm"><span class="h">Lo más importante</span>Tú <b>no puedes romper</b> la tienda desde el panel. Solo editas el contenido (textos y productos). El diseño y el funcionamiento están protegidos. Si algo no te convence, lo cambias de nuevo y listo.</div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <h3>Lo que vas a aprender</h3>
+    <ol>
+      <li>Entrar a tu panel privado</li>
+      <li>Cambiar los textos de la página</li>
+      <li>Agregar un producto nuevo (lo más usado)</li>
+      <li>Editar o quitar un producto</li>
+      <li>Destacar joyas en la portada</li>
+      <li>Ver los pedidos que te llegan</li>
+      <li>Consejos y qué conviene no tocar</li>
+    </ol>
+  </nav>
+
+  <!-- 1. LOGIN -->
+  <section class="block">
+    <div class="sec-tag"><span class="no">1</span><div><h2>Entrar a tu panel</h2><div class="sub">El lugar privado donde administras todo</div></div></div>
+    <p class="t">Tu panel vive en la misma dirección de tu tienda, agregando <b>/admin</b> al final.</p>
+    <div class="steps">
+      <div class="step"><span class="b">1</span><div class="x">Abre tu navegador y escribe la dirección de tu tienda seguida de <b>/admin</b>. Por ejemplo: <b>tutienda.com/admin</b></div></div>
+      <div class="step"><span class="b">2</span><div class="x">Escribe tu <b>correo</b> y tu <b>contraseña</b> (los que se crearon para ti al entregarte la tienda).</div></div>
+      <div class="step"><span class="b">3</span><div class="x">Presiona <b>Entrar</b>. ¡Listo! Ya estás dentro de tu panel.</div></div>
+    </div>
+
+    <div class="shot">
+      <div class="bar"><i></i><i></i><i></i><span class="url">https://tutienda.com/admin</span></div>
+      <div class="center">
+        <div class="logincard">
+          <h6>Panel de Azul Marino</h6>
+          <p>Ingresa con tu correo y contraseña</p>
+          <div class="fld" style="text-align:left"><label>Correo</label><div class="inp ph">tu@correo.com</div></div>
+          <div class="fld" style="text-align:left"><label>Contraseña</label><div class="inp">••••••••</div></div>
+          <div class="gbtn" style="display:block;text-align:center;margin-top:4px">Entrar</div>
+        </div>
+      </div>
+    </div>
+    <div class="note tip"><b>Consejo:</b> guarda esa dirección en los favoritos de tu navegador para entrar con un solo clic. Cuando termines de trabajar, usa <b>“Cerrar sesión”</b> (abajo a la izquierda), sobre todo en computadoras compartidas.</div>
+  </section>
+
+  <!-- 2. TEXTOS -->
+  <section class="block">
+    <div class="sec-tag"><span class="no">2</span><div><h2>Cambiar los textos de la página</h2><div class="sub">El título, el anuncio de arriba, la sección “Nosotros”…</div></div></div>
+    <p class="t">Todo lo que <b>se lee</b> en tu página se edita en un solo lugar.</p>
+    <div class="steps">
+      <div class="step"><span class="b">1</span><div class="x">En el menú de la izquierda, haz clic en <b>“Textos de la web”</b>.</div></div>
+      <div class="step"><span class="b">2</span><div class="x">Verás una lista de casillas, cada una con una etiqueta clara (“Inicio · título grande”, “Barra superior”, etc.). Busca la que quieres cambiar.</div></div>
+      <div class="step"><span class="b">3</span><div class="x">Borra el texto que está y escribe el tuyo. Tal cual escribirías en WhatsApp.</div></div>
+      <div class="step"><span class="b">4</span><div class="x">Presiona el botón dorado <b>“Guardar cambios”</b>. Aparecerá un aviso verde de confirmación.</div></div>
+      <div class="step"><span class="b">5</span><div class="x">Abre tu tienda (botón <b>“Ver mi tienda”</b>) para ver el cambio. Si no lo ves al instante, actualiza la página.</div></div>
+    </div>
+
+    <div class="shot">
+      <div class="bar"><i></i><i></i><i></i><span class="url">tutienda.com/admin/contenido</span></div>
+      <div class="app">
+        <div class="side">
+          <div class="lg"><span class="diamond" style="width:10px;height:10px;border-width:1.6px"></span> AZUL MARINO</div>
+          <a><span class="dotmenu"></span> Resumen</a>
+          <a><span class="dotmenu"></span> Productos</a>
+          <a class="on"><span class="dotmenu"></span> Textos de la web</a>
+          <a><span class="dotmenu"></span> Pedidos</a>
+          <a><span class="dotmenu"></span> Ver mi tienda</a>
+        </div>
+        <div class="work">
+          <h5>Textos de la web</h5>
+          <div class="wp">Edita y guarda; no necesitas código.</div>
+          <div class="fld"><label>Barra superior (anuncio)</label><div class="inp">Envío gratis en pedidos superiores a $1,500</div></div>
+          <div class="fld"><label>Inicio · título grande</label><div class="inp">El mar y la luz, en cada pieza.</div></div>
+          <div class="fld"><label>Sección Nosotros · texto</label><div class="inp" style="height:34px">Azul Marino nace del oficio de la orfebrería…</div></div>
+          <div class="gbtn">✓ Guardar cambios</div>
+        </div>
+      </div>
+    </div>
+    <div class="note tip"><b>El número de WhatsApp también se cambia aquí.</b> Escríbelo solo con números y código de país (ejemplo: <b>521234567890</b>). Así el botón verde de WhatsApp de tu tienda escribirá al número correcto.</div>
+  </section>
+
+  <!-- 3. AGREGAR PRODUCTO -->
+  <section class="block">
+    <div class="sec-tag"><span class="no">3</span><div><h2>Agregar un producto nuevo</h2><div class="sub">Lo que más vas a usar — y es automático</div></div></div>
+    <p class="t">Subir una joya nueva es como llenar una ficha: una foto, el nombre, el precio… y aparece <b>sola</b> en tu tienda. La foto incluso <b>se optimiza automáticamente</b> para que tu página cargue rápido; tú no tienes que hacer nada.</p>
+    <div class="steps">
+      <div class="step"><span class="b">1</span><div class="x">En el menú, entra a <b>“Productos”</b>.</div></div>
+      <div class="step"><span class="b">2</span><div class="x"><b>Sube la foto:</b> arrastra la imagen al recuadro punteado, o haz clic en él para elegirla desde tu computadora o celular. (Se ajusta sola, no te preocupes por el tamaño.)</div></div>
+      <div class="step"><span class="b">3</span><div class="x">Escribe el <b>Título</b> (el nombre de la joya).</div></div>
+      <div class="step"><span class="b">4</span><div class="x">Pon el <b>Precio</b> y el <b>Stock</b> (cuántas tienes disponibles).</div></div>
+      <div class="step"><span class="b">5</span><div class="x">Elige la <b>Categoría</b> (Anillos, Collares, Aretes o Pulseras) y, si quieres, la <b>Colección</b> y los <b>Materiales</b>.</div></div>
+      <div class="step"><span class="b">6</span><div class="x">Escribe una <b>Descripción</b> bonita y corta.</div></div>
+      <div class="step"><span class="b">7</span><div class="x">Mira la <b>Vista previa en vivo</b>: a la derecha verás exactamente cómo se verá la joya en tu tienda mientras escribes.</div></div>
+      <div class="step"><span class="b">8</span><div class="x">Presiona <b>“Publicar producto”</b>. Verás un aviso verde y la joya <b>aparece sola</b> en tu tienda. ¡Eso es todo!</div></div>
+    </div>
+
+    <div class="shot">
+      <div class="bar"><i></i><i></i><i></i><span class="url">tutienda.com/admin/productos</span></div>
+      <div class="app">
+        <div class="side">
+          <div class="lg"><span class="diamond" style="width:10px;height:10px;border-width:1.6px"></span> AZUL MARINO</div>
+          <a><span class="dotmenu"></span> Resumen</a>
+          <a class="on"><span class="dotmenu"></span> Productos</a>
+          <a><span class="dotmenu"></span> Textos de la web</a>
+          <a><span class="dotmenu"></span> Pedidos</a>
+        </div>
+        <div class="work">
+          <h5>Agregar producto</h5>
+          <div class="wp">Sube una foto, escribe los datos y guarda.</div>
+          <div class="flex">
+            <div style="flex:1">
+              <div class="fld"><label>Foto del producto</label>
+                <div class="drop"><div class="ic"></div>Arrastra una foto aquí<br><span style="font-size:.62rem">o haz clic para elegir (se optimiza sola)</span></div>
+              </div>
+              <div class="fld"><label>Título</label><div class="inp ph">Anillo Solitario Marea</div></div>
+              <div class="two"><div class="fld"><label>Precio (MXN)</label><div class="inp">2480</div></div><div class="fld"><label>Stock</label><div class="inp">5</div></div></div>
+              <div class="two"><div class="fld"><label>Categoría</label><div class="inp">Anillos ▾</div></div><div class="fld"><label>Colección</label><div class="inp ph">Marea</div></div></div>
+              <div class="gbtn">＋ Publicar producto</div>
+            </div>
+            <div>
+              <label style="font-size:.58rem;letter-spacing:.1em;color:#8a8068;text-transform:uppercase;display:block;margin-bottom:6px">Vista previa en vivo</label>
+              <div class="prevcard">
+                <div class="img"><svg width="60" height="60" viewBox="0 0 220 220"><ellipse cx="110" cy="150" rx="52" ry="54" fill="none" stroke="#C99A2E" stroke-width="9"/><path d="M86 96 L110 60 L134 96 L110 116 Z" fill="#176B82"/></svg></div>
+                <div class="pad"><b>Anillo Solitario Marea</b><small>Oro 18k &amp; topacio azul</small><div class="pr">$2,480</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note calm"><span class="h">Automático</span>No tienes que “publicar” en ningún otro lado ni avisar a nadie. En cuanto presionas <b>Publicar producto</b>, la joya ya está a la venta en tu página, lista para que la compren con tarjeta.</div>
+    <div class="note tip"><b>¿No tienes la foto a la mano?</b> Puedes publicar igual: la tienda mostrará un dibujo elegante de la joya según el tipo que elijas. Cuando tengas la foto, la agregas editando el producto (ver el siguiente paso).</div>
+  </section>
+
+  <!-- 4. EDITAR / QUITAR -->
+  <section class="block">
+    <div class="sec-tag"><span class="no">4</span><div><h2>Editar o quitar un producto</h2><div class="sub">Cambiar un precio, corregir un texto, o darlo de baja</div></div></div>
+    <p class="t">Debajo del formulario verás la lista de <b>“Tus productos”</b>. Cada joya tiene dos botones a la derecha.</p>
+    <div class="steps">
+      <div class="step"><span class="b">1</span><div class="x">Para <b>cambiar algo</b> (precio, foto, descripción, stock): haz clic en el botón del <b>lápiz</b>. Los datos suben al formulario, los corriges y presionas <b>“Guardar cambios”</b>.</div></div>
+      <div class="step"><span class="b">2</span><div class="x">Para <b>quitar una joya</b> de la tienda: haz clic en el botón del <b>bote de basura</b> y confirma. Desaparecerá de tu página.</div></div>
+    </div>
+
+    <div class="shot">
+      <div class="bar"><i></i><i></i><i></i><span class="url">tutienda.com/admin/productos</span></div>
+      <div class="work" style="background:#fff">
+        <h5 style="margin-bottom:10px">Tus productos (4)</h5>
+        <table class="mock">
+          <tr><th></th><th>Producto</th><th>Precio</th><th>Stock</th><th></th></tr>
+          <tr><td><div class="thumb"></div></td><td><b>Anillo Solitario Marea</b><br><span style="color:#9a8e70;font-size:.64rem">Marea</span></td><td>$2,480</td><td><span class="pill">6</span></td><td style="white-space:nowrap"><span class="iconbtn">✎</span><span class="iconbtn">🗑</span></td></tr>
+          <tr><td><div class="thumb"></div></td><td><b>Collar Gota de Mar</b><br><span style="color:#9a8e70;font-size:.64rem">Marea</span></td><td>$3,190</td><td><span class="pill low">2</span></td><td style="white-space:nowrap"><span class="iconbtn">✎</span><span class="iconbtn">🗑</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note tip"><b>El color del stock te avisa:</b> si quedan pocas piezas, el número se pone en tono naranja. Así sabes de un vistazo qué conviene reabastecer.</div>
+  </section>
+
+  <!-- 5. DESTACAR -->
+  <section class="block">
+    <div class="sec-tag"><span class="no">5</span><div><h2>Destacar joyas en la portada</h2><div class="sub">Decide qué se ve primero al entrar a tu tienda</div></div></div>
+    <p class="t">La página de inicio tiene una sección llamada <b>“Favoritos de la casa”</b>. Tú eliges qué joyas aparecen ahí.</p>
+    <div class="steps">
+      <div class="step"><span class="b">1</span><div class="x">Al crear o editar un producto, busca la casilla <b>“Destacar en portada”</b>.</div></div>
+      <div class="step"><span class="b">2</span><div class="x">Márcala para que esa joya aparezca en el inicio. Desmárcala para quitarla. Guarda y listo.</div></div>
+    </div>
+    <div class="note tip"><b>Idea:</b> destaca de 3 a 4 piezas (tus más bonitas o las de temporada) y ve cambiándolas cada cierto tiempo para que tu inicio siempre se vea fresco.</div>
+  </section>
+
+  <!-- 6. PEDIDOS -->
+  <section class="block">
+    <div class="sec-tag"><span class="no">6</span><div><h2>Ver tus pedidos</h2><div class="sub">Quién compró y cuánto pagó</div></div></div>
+    <p class="t">Cada vez que alguien compra y paga con tarjeta, el pedido aparece <b>solo</b> en tu panel.</p>
+    <div class="steps">
+      <div class="step"><span class="b">1</span><div class="x">Entra a <b>“Pedidos”</b> en el menú. Verás la fecha, el correo del cliente, el total y el estado.</div></div>
+      <div class="step"><span class="b">2</span><div class="x">En <b>“Resumen”</b> (la primera pantalla) tienes un vistazo rápido: cuántos productos tienes, cuántos pedidos van y las ventas recientes.</div></div>
+    </div>
+
+    <div class="shot">
+      <div class="bar"><i></i><i></i><i></i><span class="url">tutienda.com/admin/pedidos</span></div>
+      <div class="work" style="background:#fff">
+        <h5 style="margin-bottom:10px">Pedidos</h5>
+        <table class="mock">
+          <tr><th>Fecha</th><th>Cliente</th><th>Total</th><th>Estado</th></tr>
+          <tr><td>28/05/2026</td><td>maria@correo.com</td><td>$3,190</td><td><span class="pill">pagado</span></td></tr>
+          <tr><td>27/05/2026</td><td>jorge@correo.com</td><td>$2,480</td><td><span class="pill">pagado</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note tip"><b>El cobro es automático y seguro.</b> Los pagos con tarjeta los procesa Stripe (la misma tecnología que usan grandes tiendas). El dinero llega a tu cuenta bancaria sin que tengas que hacer nada manual.</div>
+  </section>
+
+  <!-- 7. CONSEJOS -->
+  <section class="block">
+    <div class="sec-tag"><span class="no">7</span><div><h2>Consejos y tranquilidad</h2><div class="sub">Para que trabajes sin miedo</div></div></div>
+
+    <div class="note calm"><span class="h">Respira, no se rompe</span>Desde el panel <b>solo editas contenido</b>. No puedes dañar el diseño ni dejar la tienda “caída”. Si te equivocas en un texto o un precio, simplemente lo vuelves a cambiar y guardas. Todo tiene arreglo.</div>
+
+    <h4 style="font-size:1.3rem;margin:1.4rem 0 .4rem;color:var(--ink)">Buenas prácticas</h4>
+    <ul class="clean">
+      <li>Usa <b>fotos cuadradas y bien iluminadas</b>; se ven mejor en las tarjetas de producto.</li>
+      <li>Escribe títulos <b>cortos y claros</b>, y descripciones de 1 o 2 líneas.</li>
+      <li>Mantén el <b>stock al día</b>: si se agota una pieza, ponla en 0 o quítala.</li>
+      <li><b>Revisa tu tienda</b> después de cada cambio con el botón “Ver mi tienda”.</li>
+      <li><b>Cierra sesión</b> al terminar si usas una computadora que no es tuya.</li>
+    </ul>
+
+    <h4 style="font-size:1.3rem;margin:1.6rem 0 .4rem;color:var(--ink)">Qué conviene no tocar</h4>
+    <p class="t">Tú concéntrate en <b>productos</b> y <b>textos</b>. Lo siguiente lo configuró tu desarrollador una sola vez y normalmente no hay que volver a tocarlo:</p>
+    <ul class="clean x">
+      <li>Las <b>claves y contraseñas técnicas</b> (las del cobro y la base de datos).</li>
+      <li>La <b>dirección /admin</b> y los datos de acceso: no los compartas con quien no administre la tienda.</li>
+      <li>Los <b>archivos del programa</b> (el código). No necesitas abrirlos para nada del día a día.</li>
+    </ul>
+    <div class="note warn"><span class="h">Si algo se ve raro</span>Si una pantalla no carga o ves un mensaje en rojo que dice algo de “administrador” o “configuración”, no te preocupes ni borres nada: <b>toma una captura</b> y avisa a tu desarrollador. Casi siempre es un detalle de configuración de 5 minutos.</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="wordmark">AZUL MARINO</div>
+    <p>Ya sabes todo lo necesario para mantener tu tienda viva y actualizada.<br>Cambia un texto, sube una joya nueva y mírala aparecer. Es tuya.</p>
+    <p class="small">¿Dudas técnicas (claves, dominio, correos)? Contacta a tu desarrollador.<br>Esta guía cubre el uso diario del panel de administración.</p>
+  </footer>
+
+</div>
+</body>
+</html>
