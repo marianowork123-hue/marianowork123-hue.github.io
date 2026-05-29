@@ -1,9 +1,18 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
-import {
+/* =========================================================================
+   Azul Marino — Tienda (versión estática para GitHub Pages)
+   React, Babel y los íconos se cargan por CDN desde index.html.
+   Este archivo es la maqueta original tal cual, sin "imports":
+   en su lugar tomamos lo que necesitamos del objeto global.
+   ========================================================================= */
+const { useState, useMemo, useEffect, useRef } = React;
+
+// Íconos: el build UMD de lucide-react expone el objeto global "LucideReact".
+const {
   Search, ShoppingBag, Heart, User, Menu, X, Plus, Minus, Star,
   Truck, ShieldCheck, Gem, Instagram, ArrowRight, ArrowLeft, Check,
   Trash2, Mail, MessageCircle, ChevronDown, Sparkles
-} from "lucide-react";
+} = window.LucideReact;
+
 
 /* ============================== DATA ============================== */
 const CATEGORIES = [
@@ -162,7 +171,7 @@ function ProductCard({ p, onOpen, onAdd, onWish, wished }) {
 }
 
 /* ============================== APP ============================== */
-export default function App() {
+function App() {
   const [route, setRoute] = useState("home");
   const [active, setActive] = useState(null);
   const [cat, setCat] = useState("todos");
@@ -916,3 +925,7 @@ const CSS = `
   .pdp-feats{grid-template-columns:1fr}
 }
 `;
+
+/* ============================== MONTAJE ============================== */
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);

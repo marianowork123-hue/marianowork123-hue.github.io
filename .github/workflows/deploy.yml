@@ -1,0 +1,39 @@
+name: Publicar en GitHub Pages
+
+# Publica la tienda automáticamente cada vez que subes cambios a la rama principal.
+on:
+  push:
+    branches: ["main", "master"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir los archivos del sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Todo el sitio es estático y vive en la raíz del repo.
+          path: "."
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
